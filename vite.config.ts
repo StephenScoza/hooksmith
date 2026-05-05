@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-const DEFAULT_DEV_PORT = 4317;
-const DEFAULT_PREVIEW_PORT = 4318;
+const DEFAULT_DEV_PORT = 4347;
+const DEFAULT_PREVIEW_PORT = 4348;
 
 export default defineConfig({
   plugins: [react()],

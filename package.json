@@ -8,10 +8,10 @@
   },
   "scripts": {
     "dev": "vite",
-    "dev:local": "vite --host 127.0.0.1 --port 4317",
+    "dev:local": "vite --host 127.0.0.1 --port 4347",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "preview:local": "vite preview --host 127.0.0.1 --port 4318"
+    "preview:local": "vite preview --host 127.0.0.1 --port 4348"
   },
   "dependencies": {
     "lucide-react": "^0.511.0",

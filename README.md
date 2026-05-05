@@ -75,7 +75,7 @@ npm install
 npm run dev
 ```
 
-By default, Hooksmith runs on `http://127.0.0.1:4317` so it is less likely to collide with other local apps. You can override that with `HOOKSMITH_PORT`.
+By default, Hooksmith runs on `http://127.0.0.1:4347` so it is less likely to collide with other local apps. You can override that with `HOOKSMITH_PORT`.
 
 If you want to force the repo's preferred local port explicitly, use:
 
@@ -89,7 +89,7 @@ npm run dev:local
 npm run build
 ```
 
-Local preview uses `http://127.0.0.1:4318` by default and can be overridden with `HOOKSMITH_PREVIEW_PORT`.
+Local preview uses `http://127.0.0.1:4348` by default and can be overridden with `HOOKSMITH_PREVIEW_PORT`.
 
 To preview the production build on the repo's preferred preview port, use:
 
@@ -108,13 +108,13 @@ If you run a lot of local apps on the same machine, a simple convention helps av
 Example convention:
 
 - `4301` / `4302` for app A
-- `4317` / `4318` for Hooksmith
+- `4347` / `4348` for Hooksmith
 - `4331` / `4332` for app C
 
 For Hooksmith specifically:
 
-- `HOOKSMITH_PORT=4317`
-- `HOOKSMITH_PREVIEW_PORT=4318`
+- `HOOKSMITH_PORT=4347`
+- `HOOKSMITH_PREVIEW_PORT=4348`
 
 ## Implementation notes
 
