@@ -17,6 +17,7 @@ type WebhookStore = {
   builderTab: BuilderTab;
   jsonDraft: string;
   jsonError: string | null;
+  lastSavedAt: number;
   webhookUrl: string;
   sendState: SendState;
   setBuilderTab: (tab: BuilderTab) => void;
@@ -41,9 +42,12 @@ type WebhookStore = {
   moveField: (embedIndex: number, fieldIndex: number, direction: -1 | 1) => void;
   setJsonDraft: (value: string) => void;
   syncJsonDraftFromPayload: () => void;
+  wipeLocalDraft: () => void;
   setWebhookUrl: (value: string) => void;
   setSendState: (state: SendState) => void;
 };
+
+const STORAGE_KEY = 'hooksmith-local-state';
 
 function syncJson(payload: DiscordWebhookPayload) {
   return serializePayload(payload);
@@ -53,7 +57,8 @@ function setPayloadAndJson(payload: DiscordWebhookPayload) {
   return {
     payload,
     jsonDraft: syncJson(payload),
-    jsonError: null
+    jsonError: null,
+    lastSavedAt: Date.now()
   };
 }
 
@@ -239,17 +244,31 @@ export const useWebhookStore = create<WebhookStore>()(
       syncJsonDraftFromPayload: () =>
         set((state) => ({
           jsonDraft: syncJson(state.payload),
-          jsonError: null
+          jsonError: null,
+          lastSavedAt: Date.now()
         })),
+      wipeLocalDraft: () => {
+        if (typeof window !== 'undefined') {
+          window.localStorage.removeItem(STORAGE_KEY);
+        }
+
+        set({
+          ...setPayloadAndJson(createDefaultPayload()),
+          builderTab: 'visual',
+          webhookUrl: '',
+          sendState: { status: 'idle' }
+        });
+      },
       setWebhookUrl: (webhookUrl) => set({ webhookUrl }),
       setSendState: (sendState) => set({ sendState })
     }),
     {
-      name: 'hooksmith-local-state',
+      name: STORAGE_KEY,
       partialize: (state) => ({
         payload: state.payload,
         builderTab: state.builderTab,
-        jsonDraft: state.jsonDraft
+        jsonDraft: state.jsonDraft,
+        lastSavedAt: state.lastSavedAt
       }),
       onRehydrateStorage: () => (state) => {
         if (!state) {
@@ -258,6 +277,7 @@ export const useWebhookStore = create<WebhookStore>()(
 
         state.jsonDraft = syncJson(state.payload);
         state.jsonError = null;
+        state.lastSavedAt = state.lastSavedAt ?? Date.now();
         state.webhookUrl = '';
         state.sendState = { status: 'idle' };
       }

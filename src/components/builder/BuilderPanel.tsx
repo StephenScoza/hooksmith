@@ -1,4 +1,4 @@
-import { Braces, RotateCcw } from 'lucide-react';
+import { Braces, RotateCcw, Trash2 } from 'lucide-react';
 import { payloadTemplates } from '../../lib/templates';
 import { useWebhookStore } from '../../store/useWebhookStore';
 import { Button, Panel, PanelHeader, SmallBadge } from '../ui/FormControls';
@@ -10,6 +10,13 @@ export function BuilderPanel() {
   const setBuilderTab = useWebhookStore((state) => state.setBuilderTab);
   const applyTemplate = useWebhookStore((state) => state.applyTemplate);
   const resetPayload = useWebhookStore((state) => state.resetPayload);
+  const wipeLocalDraft = useWebhookStore((state) => state.wipeLocalDraft);
+  const lastSavedAt = useWebhookStore((state) => state.lastSavedAt);
+
+  const savedTimeLabel = new Intl.DateTimeFormat(undefined, {
+    hour: 'numeric',
+    minute: '2-digit'
+  }).format(lastSavedAt);
 
   return (
     <Panel>
@@ -19,9 +26,14 @@ export function BuilderPanel() {
         description="Switch between a guided visual builder and direct JSON editing. Your payload stays local in the browser and is restored from localStorage."
         action={
           <div className="flex flex-wrap items-center gap-2">
+            <SmallBadge tone="success">Saved locally at {savedTimeLabel}</SmallBadge>
             <Button variant="secondary" onClick={resetPayload}>
               <RotateCcw className="h-4 w-4" />
               Reset
+            </Button>
+            <Button variant="ghost" onClick={wipeLocalDraft}>
+              <Trash2 className="h-4 w-4" />
+              Wipe local draft
             </Button>
           </div>
         }
