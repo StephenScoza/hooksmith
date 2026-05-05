@@ -75,11 +75,15 @@ npm install
 npm run dev
 ```
 
+By default, Hooksmith runs on `http://127.0.0.1:4317` so it is less likely to collide with other local apps. You can override that with `HOOKSMITH_PORT`.
+
 3. Build for production:
 
 ```bash
 npm run build
 ```
+
+Local preview uses `http://127.0.0.1:4318` by default and can be overridden with `HOOKSMITH_PREVIEW_PORT`.
 
 ## Implementation notes
 
