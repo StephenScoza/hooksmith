@@ -1,4 +1,6 @@
-import { BellRing, Code2, Hammer, ShieldAlert, WandSparkles } from 'lucide-react';
+import { AlertTriangle, Code2, HardDriveDownload, Hammer, ShieldAlert, WandSparkles } from 'lucide-react';
+import { getPayloadSize } from './lib/discord';
+import { getValidationIssues } from './lib/validation';
 import { BuilderPanel } from './components/builder/BuilderPanel';
 import { ExportPanel } from './components/export/ExportPanel';
 import { PreviewPanel } from './components/preview/PreviewPanel';
@@ -8,6 +10,9 @@ import { useWebhookStore } from './store/useWebhookStore';
 
 export default function App() {
   const payload = useWebhookStore((state) => state.payload);
+  const payloadSize = getPayloadSize(payload);
+  const validationIssueCount = getValidationIssues(payload).length;
+  const fieldCount = payload.embeds.reduce((total, embed) => total + embed.fields.length, 0);
 
   return (
     <main className="min-h-screen bg-[#08111f] text-slate-100">
@@ -80,15 +85,30 @@ export default function App() {
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Fields</p>
-                  <p className="mt-2 text-2xl font-semibold text-white">
-                    {payload.embeds.reduce((total, embed) => total + embed.fields.length, 0)}
+                  <p className="mt-2 text-2xl font-semibold text-white">{fieldCount}</p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Payload</p>
+                  <p className="mt-2 flex items-center gap-2 text-sm font-medium text-white">
+                    <HardDriveDownload className="h-4 w-4 text-cyan-300" />
+                    {payloadSize} bytes
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Validation</p>
+                  <p className="mt-2 flex items-center gap-2 text-sm font-medium text-white">
+                    <AlertTriangle className={`h-4 w-4 ${validationIssueCount ? 'text-amber-300' : 'text-emerald-300'}`} />
+                    {validationIssueCount ? `${validationIssueCount} issue${validationIssueCount === 1 ? '' : 's'}` : 'Clean'}
                   </p>
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Mode</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Storage</p>
                   <p className="mt-2 flex items-center gap-2 text-sm font-medium text-white">
-                    <BellRing className="h-4 w-4 text-emerald-300" />
-                    Local
+                    <ShieldAlert className="h-4 w-4 text-emerald-300" />
+                    Local only
                   </p>
                 </div>
               </div>

@@ -46,19 +46,29 @@ export function BuilderPanel() {
           </button>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <SmallBadge>Templates</SmallBadge>
-          {payloadTemplates.map((template) => (
-            <button
-              key={template.id}
-              type="button"
-              onClick={() => applyTemplate(template.id)}
-              className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-300 transition hover:border-cyan-400/40 hover:text-white"
-              title={template.description}
-            >
-              {template.name}
-            </button>
-          ))}
+        <div>
+          <div className="mb-3 flex items-center gap-2">
+            <SmallBadge>Templates</SmallBadge>
+            <p className="text-sm text-slate-400">Start from common webhook patterns instead of building every payload from scratch.</p>
+          </div>
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {payloadTemplates.map((template) => (
+              <button
+                key={template.id}
+                type="button"
+                onClick={() => applyTemplate(template.id)}
+                className="rounded-3xl border border-white/10 bg-white/5 p-4 text-left transition hover:border-cyan-400/40 hover:bg-cyan-400/5"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-medium text-white">{template.name}</p>
+                    <p className="mt-2 text-sm leading-6 text-slate-400">{template.description}</p>
+                  </div>
+                  <SmallBadge>Use</SmallBadge>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

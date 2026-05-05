@@ -25,6 +25,7 @@ type WebhookStore = {
   applyTemplate: (templateId: string) => void;
   resetPayload: () => void;
   addEmbed: () => void;
+  duplicateEmbed: (embedIndex: number) => void;
   removeEmbed: (embedIndex: number) => void;
   moveEmbed: (embedIndex: number, direction: -1 | 1) => void;
   updateEmbed: (embedIndex: number, patch: Partial<DiscordWebhookPayload['embeds'][number]>) => void;
@@ -34,6 +35,7 @@ type WebhookStore = {
     patch: Record<string, string>
   ) => void;
   addField: (embedIndex: number) => void;
+  duplicateField: (embedIndex: number, fieldIndex: number) => void;
   updateField: (embedIndex: number, fieldIndex: number, patch: Partial<DiscordWebhookPayload['embeds'][number]['fields'][number]>) => void;
   removeField: (embedIndex: number, fieldIndex: number) => void;
   moveField: (embedIndex: number, fieldIndex: number, direction: -1 | 1) => void;
@@ -85,6 +87,23 @@ export const useWebhookStore = create<WebhookStore>()(
           };
           return setPayloadAndJson(payload);
         }),
+      duplicateEmbed: (embedIndex) =>
+        set((state) => {
+          const embeds = [...state.payload.embeds];
+          const source = embeds[embedIndex];
+          embeds.splice(embedIndex + 1, 0, {
+            ...source,
+            author: source.author ? { ...source.author } : undefined,
+            footer: source.footer ? { ...source.footer } : undefined,
+            image: source.image ? { ...source.image } : undefined,
+            thumbnail: source.thumbnail ? { ...source.thumbnail } : undefined,
+            fields: source.fields.map((field) => ({ ...field }))
+          });
+          return setPayloadAndJson({
+            ...state.payload,
+            embeds
+          });
+        }),
       removeEmbed: (embedIndex) =>
         set((state) => {
           const nextEmbeds = state.payload.embeds.filter((_, index) => index !== embedIndex);
@@ -133,6 +152,19 @@ export const useWebhookStore = create<WebhookStore>()(
           embeds[embedIndex] = {
             ...embed,
             fields: [...embed.fields, createEmptyField()]
+          };
+          const payload = { ...state.payload, embeds };
+          return setPayloadAndJson(payload);
+        }),
+      duplicateField: (embedIndex, fieldIndex) =>
+        set((state) => {
+          const embeds = [...state.payload.embeds];
+          const embed = embeds[embedIndex];
+          const fields = [...embed.fields];
+          fields.splice(fieldIndex + 1, 0, { ...fields[fieldIndex] });
+          embeds[embedIndex] = {
+            ...embed,
+            fields
           };
           const payload = { ...state.payload, embeds };
           return setPayloadAndJson(payload);

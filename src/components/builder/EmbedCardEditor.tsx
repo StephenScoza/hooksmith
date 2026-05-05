@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, Clock3, GripHorizontal, Plus, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, Clock3, CopyPlus, GripHorizontal, Plus, Trash2 } from 'lucide-react';
 import { DISCORD_LIMITS, decimalToHex, getCharacterLimitMessage, hexToDecimal, type DiscordEmbed } from '../../lib/discord';
 import { useWebhookStore } from '../../store/useWebhookStore';
 import { Button, EmptyState, SmallBadge, TextInput, TextareaInput, ToggleInput } from '../ui/FormControls';
@@ -7,9 +7,11 @@ export function EmbedCardEditor({ embed, embedIndex }: { embed: DiscordEmbed; em
   const updateEmbed = useWebhookStore((state) => state.updateEmbed);
   const updateEmbedNested = useWebhookStore((state) => state.updateEmbedNested);
   const addField = useWebhookStore((state) => state.addField);
+  const duplicateField = useWebhookStore((state) => state.duplicateField);
   const updateField = useWebhookStore((state) => state.updateField);
   const removeField = useWebhookStore((state) => state.removeField);
   const moveField = useWebhookStore((state) => state.moveField);
+  const duplicateEmbed = useWebhookStore((state) => state.duplicateEmbed);
   const removeEmbed = useWebhookStore((state) => state.removeEmbed);
   const moveEmbed = useWebhookStore((state) => state.moveEmbed);
   const embedCount = useWebhookStore((state) => state.payload.embeds.length);
@@ -29,11 +31,15 @@ export function EmbedCardEditor({ embed, embedIndex }: { embed: DiscordEmbed; em
 
         <div className="flex flex-wrap items-center gap-2">
           <SmallBadge>{embed.fields.length}/{DISCORD_LIMITS.fields} fields</SmallBadge>
-          <Button variant="ghost" onClick={() => moveEmbed(embedIndex, -1)} disabled={embedIndex === 0}>
+          <Button variant="ghost" aria-label={`Move embed ${embedIndex + 1} up`} onClick={() => moveEmbed(embedIndex, -1)} disabled={embedIndex === 0}>
             <ArrowUp className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" onClick={() => moveEmbed(embedIndex, 1)} disabled={embedIndex === embedCount - 1}>
+          <Button variant="ghost" aria-label={`Move embed ${embedIndex + 1} down`} onClick={() => moveEmbed(embedIndex, 1)} disabled={embedIndex === embedCount - 1}>
             <ArrowDown className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" onClick={() => duplicateEmbed(embedIndex)} disabled={embedCount >= DISCORD_LIMITS.embeds}>
+            <CopyPlus className="h-4 w-4" />
+            Duplicate
           </Button>
           <Button variant="danger" onClick={() => removeEmbed(embedIndex)} disabled={embedCount === 1}>
             <Trash2 className="h-4 w-4" />
@@ -184,15 +190,24 @@ export function EmbedCardEditor({ embed, embedIndex }: { embed: DiscordEmbed; em
                   <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                     <p className="text-sm font-medium text-white">Field {fieldIndex + 1}</p>
                     <div className="flex items-center gap-2">
-                      <Button variant="ghost" onClick={() => moveField(embedIndex, fieldIndex, -1)} disabled={fieldIndex === 0}>
+                      <Button variant="ghost" aria-label={`Move field ${fieldIndex + 1} up`} onClick={() => moveField(embedIndex, fieldIndex, -1)} disabled={fieldIndex === 0}>
                         <ArrowUp className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="ghost"
+                        aria-label={`Move field ${fieldIndex + 1} down`}
                         onClick={() => moveField(embedIndex, fieldIndex, 1)}
                         disabled={fieldIndex === embed.fields.length - 1}
                       >
                         <ArrowDown className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        onClick={() => duplicateField(embedIndex, fieldIndex)}
+                        disabled={embed.fields.length >= DISCORD_LIMITS.fields}
+                      >
+                        <CopyPlus className="h-4 w-4" />
+                        Duplicate
                       </Button>
                       <Button variant="danger" onClick={() => removeField(embedIndex, fieldIndex)}>
                         <Trash2 className="h-4 w-4" />
