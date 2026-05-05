@@ -69,7 +69,7 @@ export function BuilderPanel() {
                 key={template.id}
                 type="button"
                 onClick={() => applyTemplate(template.id)}
-                className="rounded-3xl border border-white/10 bg-white/5 p-4 text-left transition hover:border-cyan-400/40 hover:bg-cyan-400/5"
+                className="rounded-3xl border border-white/10 bg-white/5 p-4 text-left transition hover:border-orange-400/40 hover:bg-orange-400/5"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>

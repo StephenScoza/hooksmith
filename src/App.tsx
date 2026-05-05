@@ -1,4 +1,5 @@
-import { AlertTriangle, Code2, HardDriveDownload, Hammer, ShieldAlert, WandSparkles } from 'lucide-react';
+import { AlertTriangle, Code2, HardDriveDownload, ShieldAlert, WandSparkles } from 'lucide-react';
+import { BrandLogo } from './components/brand/BrandLogo';
 import { getPayloadSize } from './lib/discord';
 import { getValidationIssues } from './lib/validation';
 import { BuilderPanel } from './components/builder/BuilderPanel';
@@ -15,25 +16,22 @@ export default function App() {
   const fieldCount = payload.embeds.reduce((total, embed) => total + embed.fields.length, 0);
 
   return (
-    <main className="min-h-screen bg-[#08111f] text-slate-100">
+    <main className="min-h-screen bg-[var(--brand-surface)] text-slate-100">
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute left-[10%] top-0 h-80 w-80 rounded-full bg-cyan-500/20 blur-3xl" />
-        <div className="absolute right-[8%] top-24 h-96 w-96 rounded-full bg-fuchsia-500/15 blur-3xl" />
-        <div className="absolute inset-x-0 top-0 h-[28rem] bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.16),transparent_60%)]" />
+        <div className="absolute left-[8%] top-0 h-80 w-80 rounded-full bg-orange-500/20 blur-3xl" />
+        <div className="absolute right-[8%] top-24 h-96 w-96 rounded-full bg-slate-400/10 blur-3xl" />
+        <div className="absolute inset-x-0 top-0 h-[28rem] bg-[radial-gradient(circle_at_top,rgba(249,115,22,0.16),transparent_58%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.07)_1px,transparent_1px)] bg-[size:36px_36px] [mask-image:linear-gradient(to_bottom,white,transparent)]" />
       </div>
 
       <div className="mx-auto max-w-[1600px] px-4 py-5 sm:px-6 lg:px-8">
-        <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/70 px-6 py-8 shadow-2xl shadow-slate-950/40 backdrop-blur xl:px-8">
-          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(34,211,238,0.08),transparent_35%,rgba(244,114,182,0.08))]" />
+        <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(135deg,rgba(17,24,39,0.98),rgba(21,30,46,0.94))] px-6 py-8 shadow-2xl shadow-black/30 backdrop-blur xl:px-8">
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(249,115,22,0.10),transparent_30%,rgba(107,114,128,0.08))]" />
           <div className="relative flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
             <div className="max-w-4xl">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.3em] text-cyan-200">
-                <Hammer className="h-4 w-4" />
-                Hooksmith
-              </div>
+              <BrandLogo size="lg" />
               <h1 className="max-w-3xl text-4xl font-bold leading-tight text-white sm:text-5xl xl:text-6xl">
-                Production-ready Discord webhook and embed payloads, without hand-authoring every key.
+                Forge Discord webhooks visually, with the precision of a production toolchain.
               </h1>
               <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
                 Build visually, tune raw JSON, preview the result in a Discord-style layout, validate against official
@@ -42,14 +40,14 @@ export default function App() {
 
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div className="mb-2 inline-flex rounded-xl bg-cyan-400/10 p-2 text-cyan-200">
+                  <div className="mb-2 inline-flex rounded-xl bg-orange-500/10 p-2 text-orange-200">
                     <WandSparkles className="h-4 w-4" />
                   </div>
                   <p className="text-sm font-medium text-white">Visual-first builder</p>
                   <p className="mt-1 text-sm text-slate-400">Embeds, fields, media, colors, metadata, and templates.</p>
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div className="mb-2 inline-flex rounded-xl bg-indigo-400/10 p-2 text-indigo-200">
+                  <div className="mb-2 inline-flex rounded-xl bg-slate-400/10 p-2 text-slate-200">
                     <Code2 className="h-4 w-4" />
                   </div>
                   <p className="text-sm font-medium text-white">Export engine</p>
@@ -90,7 +88,7 @@ export default function App() {
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Payload</p>
                   <p className="mt-2 flex items-center gap-2 text-sm font-medium text-white">
-                    <HardDriveDownload className="h-4 w-4 text-cyan-300" />
+                    <HardDriveDownload className="h-4 w-4 text-orange-300" />
                     {payloadSize} bytes
                   </p>
                 </div>

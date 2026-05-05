@@ -7,7 +7,15 @@
 :root {
   color-scheme: dark;
   font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-  background: #08111f;
+  background: #0d1421;
+  --brand-navy: #111827;
+  --brand-navy-ink: #111827;
+  --brand-slate: #6b7280;
+  --brand-ice: #f3f4f6;
+  --brand-orange: #f97316;
+  --brand-orange-strong: #ff5f0f;
+  --brand-surface: #0d1421;
+  --brand-surface-2: #161f31;
 }
 
 html {
@@ -18,9 +26,10 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    radial-gradient(circle at top, rgba(14, 165, 233, 0.12), transparent 35%),
-    linear-gradient(180deg, #08111f 0%, #09111c 45%, #050b15 100%);
-  color: #e2e8f0;
+    radial-gradient(circle at top, rgba(249, 115, 22, 0.16), transparent 34%),
+    radial-gradient(circle at 85% 12%, rgba(107, 114, 128, 0.12), transparent 28%),
+    linear-gradient(180deg, #0d1421 0%, #111827 42%, #0a101a 100%);
+  color: var(--brand-ice);
 }
 
 * {
@@ -45,7 +54,7 @@ img {
 }
 
 ::selection {
-  background: rgba(34, 211, 238, 0.3);
+  background: rgba(249, 115, 22, 0.28);
 }
 
 #root {

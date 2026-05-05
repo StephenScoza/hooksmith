@@ -58,7 +58,7 @@ export function ExportPanel() {
       </div>
 
       <div className="p-5 sm:p-6">
-        <pre className="max-h-[460px] overflow-auto rounded-[1.5rem] border border-white/10 bg-[#09111f] p-4 text-sm leading-7 text-cyan-100">
+        <pre className="max-h-[460px] overflow-auto rounded-[1.5rem] border border-white/10 bg-[#0f1725] p-4 text-sm leading-7 text-orange-50">
           <code>{code}</code>
         </pre>
       </div>

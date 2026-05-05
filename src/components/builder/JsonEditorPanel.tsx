@@ -42,7 +42,7 @@ export function JsonEditorPanel() {
           value={jsonDraft}
           onChange={(event) => setJsonDraft(event.target.value)}
           spellCheck={false}
-          className="h-[720px] w-full resize-y rounded-[1.25rem] border border-white/10 bg-[#09111f] p-4 font-mono text-sm leading-7 text-cyan-100 outline-none transition focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/10"
+          className="h-[720px] w-full resize-y rounded-[1.25rem] border border-white/10 bg-[#0f1725] p-4 font-mono text-sm leading-7 text-orange-50 outline-none transition focus:border-orange-400/60 focus:ring-2 focus:ring-orange-400/10"
         />
       </div>
 

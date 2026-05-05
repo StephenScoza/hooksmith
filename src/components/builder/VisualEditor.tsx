@@ -80,9 +80,9 @@ export function VisualEditor() {
           ))}
         </div>
 
-        <div className="rounded-3xl border border-cyan-400/15 bg-cyan-400/5 px-4 py-4 text-sm leading-6 text-cyan-50/85">
+        <div className="rounded-3xl border border-orange-400/15 bg-orange-400/5 px-4 py-4 text-sm leading-6 text-orange-50/85">
           <div className="flex items-start gap-3">
-            <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-cyan-200" />
+            <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-orange-200" />
             <p>
               Helpful pattern: use `content` for the short, high-signal message and keep the deeper context inside embeds.
               That keeps notifications readable without losing detail in the preview.

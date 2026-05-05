@@ -135,7 +135,7 @@ export function SendPanel() {
                 ? 'border-rose-400/25 bg-rose-400/10 text-rose-100'
                 : sendState.status === 'success'
                   ? 'border-emerald-400/25 bg-emerald-400/10 text-emerald-100'
-                  : 'border-cyan-400/20 bg-cyan-400/10 text-cyan-100'
+                  : 'border-orange-400/20 bg-orange-400/10 text-orange-100'
             }`}
           >
             {sendState.message}

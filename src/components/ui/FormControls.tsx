@@ -15,7 +15,7 @@ export function Panel({
   className?: string;
 }>) {
   return (
-    <section className={cn('rounded-[1.75rem] border border-white/10 bg-slate-950/70 shadow-2xl shadow-slate-950/30 backdrop-blur', className)}>
+    <section className={cn('rounded-[1.75rem] border border-white/10 bg-[color:rgba(17,24,39,0.78)] shadow-2xl shadow-black/25 backdrop-blur', className)}>
       {children}
     </section>
   );
@@ -35,7 +35,7 @@ export function PanelHeader({
   return (
     <div className="flex flex-col gap-4 border-b border-white/10 px-5 py-5 sm:flex-row sm:items-start sm:justify-between sm:px-6">
       <div>
-        {eyebrow ? <p className="text-xs font-medium uppercase tracking-[0.28em] text-cyan-200">{eyebrow}</p> : null}
+        {eyebrow ? <p className="text-xs font-medium uppercase tracking-[0.28em] text-[var(--brand-orange)]">{eyebrow}</p> : null}
         <h2 className="mt-1 text-xl font-semibold text-white">{title}</h2>
         {description ? <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-400">{description}</p> : null}
       </div>
@@ -73,7 +73,7 @@ export function TextInput({
       <input
         {...props}
         className={cn(
-          'w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/10',
+          'w-full rounded-2xl border border-white/10 bg-[color:rgba(17,24,39,0.82)] px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-[color:rgba(249,115,22,0.65)] focus:ring-2 focus:ring-[color:rgba(249,115,22,0.14)]',
           className
         )}
       />
@@ -98,7 +98,7 @@ export function TextareaInput({
       <textarea
         {...props}
         className={cn(
-          'min-h-[120px] w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/10',
+          'min-h-[120px] w-full rounded-2xl border border-white/10 bg-[color:rgba(17,24,39,0.82)] px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-[color:rgba(249,115,22,0.65)] focus:ring-2 focus:ring-[color:rgba(249,115,22,0.14)]',
           className
         )}
       />
@@ -130,7 +130,7 @@ export function ToggleInput({
         onClick={() => onChange(!checked)}
         className={cn(
           'relative mt-0.5 h-7 w-12 rounded-full border transition',
-          checked ? 'border-cyan-400/50 bg-cyan-400/30' : 'border-white/10 bg-slate-800'
+          checked ? 'border-[color:rgba(249,115,22,0.5)] bg-[color:rgba(249,115,22,0.28)]' : 'border-white/10 bg-slate-800'
         )}
       >
         <span
@@ -154,7 +154,7 @@ export function Button({
 }) {
   const variantClassName =
     variant === 'primary'
-      ? 'border border-cyan-400/40 bg-cyan-400/15 text-cyan-50 hover:bg-cyan-400/20'
+      ? 'border border-[color:rgba(249,115,22,0.45)] bg-[color:rgba(249,115,22,0.16)] text-orange-50 hover:bg-[color:rgba(249,115,22,0.24)]'
       : variant === 'secondary'
         ? 'border border-white/10 bg-white/5 text-slate-100 hover:bg-white/10'
         : variant === 'danger'
@@ -181,7 +181,7 @@ export function SmallBadge({ children, tone = 'default' }: PropsWithChildren<{ t
       ? 'border-amber-400/25 bg-amber-400/10 text-amber-100'
       : tone === 'success'
         ? 'border-emerald-400/25 bg-emerald-400/10 text-emerald-100'
-        : 'border-white/10 bg-white/5 text-slate-300';
+        : 'border-[color:rgba(249,115,22,0.22)] bg-[color:rgba(249,115,22,0.08)] text-orange-100';
 
   return <span className={cn('inline-flex rounded-full border px-2.5 py-1 text-xs font-medium', className)}>{children}</span>;
 }

@@ -36,7 +36,7 @@ export function PreviewPanel() {
       <div className="p-5 sm:p-6">
         <div className="rounded-[1.75rem] border border-white/10 bg-[#313338] p-4 shadow-inner shadow-black/20 sm:p-5">
           <div className="flex items-start gap-3">
-            <div className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-full bg-gradient-to-br from-cyan-400 to-indigo-500 text-sm font-semibold text-white">
+            <div className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-full bg-gradient-to-br from-orange-500 to-slate-700 text-sm font-semibold text-white">
               {avatarUrl ? <img src={avatarUrl} alt="" className="h-full w-full object-cover" /> : <Bot className="h-5 w-5" />}
             </div>
 
