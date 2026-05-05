@@ -61,6 +61,8 @@ src/
 
 ## Local development
 
+Recommended runtime: Node.js `20.19.0` or newer.
+
 1. Install dependencies:
 
 ```bash
