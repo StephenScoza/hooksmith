@@ -1,11 +1,221 @@
 import { useMemo, useState } from 'react';
-import { ArrowDown, ArrowUp, ChevronDown, ChevronRight, Clock3, CopyPlus, Link2, Plus, Trash2 } from 'lucide-react';
-import { DISCORD_LIMITS, calculateEmbedTextLength, decimalToHex, getCharacterLimitMessage, hexToDecimal, type DiscordEmbed } from '../../lib/discord';
-import { cn } from '../../lib/utils';
+import { ArrowDown, ArrowUp, ChevronDown, ChevronRight, Clock3, CopyPlus, Plus, Sparkles, Trash2 } from 'lucide-react';
+import {
+  DISCORD_LIMITS,
+  calculateEmbedTextLength,
+  createEmptyEmbed,
+  decimalToHex,
+  getCharacterLimitMessage,
+  hexToDecimal,
+  type DiscordEmbed,
+  type DiscordEmbedField
+} from '../../lib/discord';
 import { useWebhookStore } from '../../store/useWebhookStore';
 import { Button, EmptyState, SmallBadge, TextInput, TextareaInput, ToggleInput } from '../ui/FormControls';
 
 type SectionKey = 'content' | 'meta' | 'identity' | 'media' | 'fields';
+
+type EmbedPreset = {
+  id: string;
+  name: string;
+  description: string;
+  build: () => DiscordEmbed;
+};
+
+type FieldPreset = {
+  id: string;
+  name: string;
+  description: string;
+  fields: DiscordEmbedField[];
+};
+
+const embedPresets: EmbedPreset[] = [
+  {
+    id: 'status-update',
+    name: 'Status update',
+    description: 'Quick progress card for launches, rollouts, or milestone updates.',
+    build: () => ({
+      ...createEmptyEmbed(),
+      title: 'Rollout status: 78% complete',
+      description: 'The release is progressing normally. Regional checks are green and final validation is underway.',
+      color: 0xf97316,
+      fields: [
+        {
+          name: 'Current phase',
+          value: 'Gradual rollout',
+          inline: true
+        },
+        {
+          name: 'Owner',
+          value: 'Release engineering',
+          inline: true
+        },
+        {
+          name: 'Next checkpoint',
+          value: 'Confirm error rate remains below threshold for 30 more minutes.',
+          inline: false
+        }
+      ],
+      footer: {
+        text: 'Status communications'
+      }
+    })
+  },
+  {
+    id: 'release-card',
+    name: 'Release card',
+    description: 'Structured release summary with highlights and next steps.',
+    build: () => ({
+      ...createEmptyEmbed(),
+      title: 'Hooksmith v1.3.0',
+      description: 'A cleaner builder flow, stronger validation, and safer webhook testing tools are now available.',
+      url: 'https://example.com/changelog',
+      color: 0x2563eb,
+      fields: [
+        {
+          name: 'Highlights',
+          value: 'Preset embeds, tighter mobile UX, and expanded export workflows.',
+          inline: false
+        },
+        {
+          name: 'Migration',
+          value: 'No breaking changes',
+          inline: true
+        },
+        {
+          name: 'Docs',
+          value: 'Review the changelog for setup notes.',
+          inline: true
+        }
+      ],
+      footer: {
+        text: 'Release stream'
+      }
+    })
+  },
+  {
+    id: 'incident-alert',
+    name: 'Incident alert',
+    description: 'High-signal operational incident format with timestamp and ownership.',
+    build: () => ({
+      ...createEmptyEmbed(),
+      title: 'SEV-2 incident: elevated webhook failures',
+      description: 'We are investigating increased delivery failures affecting a subset of outbound Discord notifications.',
+      color: 0xef4444,
+      timestamp: new Date().toISOString(),
+      fields: [
+        {
+          name: 'Impact',
+          value: 'Roughly 18% of sends are retrying and some notifications may arrive late.',
+          inline: false
+        },
+        {
+          name: 'Status',
+          value: 'Investigating',
+          inline: true
+        },
+        {
+          name: 'Owner',
+          value: 'On-call platform team',
+          inline: true
+        }
+      ],
+      footer: {
+        text: 'Incident communications'
+      }
+    })
+  },
+  {
+    id: 'welcome-block',
+    name: 'Welcome block',
+    description: 'Friendly onboarding card for communities and customer spaces.',
+    build: () => ({
+      ...createEmptyEmbed(),
+      title: 'Welcome aboard',
+      description: 'Here are the first places to visit so you can get oriented quickly and find the right conversations.',
+      color: 0xf59e0b,
+      fields: [
+        {
+          name: 'Start here',
+          value: 'Read the rules, introduce yourself, and check the announcement channels.',
+          inline: false
+        },
+        {
+          name: 'Need help?',
+          value: 'Ping a moderator or open a support thread.',
+          inline: false
+        }
+      ],
+      footer: {
+        text: 'Welcome flow'
+      }
+    })
+  },
+  {
+    id: 'link-roundup',
+    name: 'Link roundup',
+    description: 'Compact resource card for docs, demos, or campaign links.',
+    build: () => ({
+      ...createEmptyEmbed(),
+      title: 'This week in resources',
+      description: 'A compact roundup of docs, demos, and follow-up links for the team.',
+      color: 0x14b8a6,
+      fields: [
+        {
+          name: 'Docs',
+          value: '[Implementation guide](https://example.com/docs)',
+          inline: true
+        },
+        {
+          name: 'Demo',
+          value: '[Watch the walkthrough](https://example.com/demo)',
+          inline: true
+        },
+        {
+          name: 'Next read',
+          value: '[Release notes and rollout checklist](https://example.com/release)',
+          inline: false
+        }
+      ],
+      footer: {
+        text: 'Resource roundup'
+      }
+    })
+  }
+];
+
+const fieldPresets: FieldPreset[] = [
+  {
+    id: 'ops-triad',
+    name: 'Ops triad',
+    description: 'Status, owner, and impact for incidents or launch monitoring.',
+    fields: [
+      { name: 'Status', value: 'Investigating', inline: true },
+      { name: 'Owner', value: 'On-call team', inline: true },
+      { name: 'Impact', value: 'Describe user-facing impact here.', inline: false }
+    ]
+  },
+  {
+    id: 'release-triad',
+    name: 'Release triad',
+    description: 'Version, environment, and docs links for shipping notes.',
+    fields: [
+      { name: 'Version', value: 'v1.0.0', inline: true },
+      { name: 'Environment', value: 'Production', inline: true },
+      { name: 'Docs', value: 'Link changelog, migration steps, or follow-up notes.', inline: false }
+    ]
+  },
+  {
+    id: 'moderation-triad',
+    name: 'Moderation triad',
+    description: 'Subject, action, and reason for audit-style records.',
+    fields: [
+      { name: 'Member', value: '@example-user', inline: true },
+      { name: 'Action', value: 'Timeout - 24 hours', inline: true },
+      { name: 'Reason', value: 'Summarize the rule violation or decision context.', inline: false }
+    ]
+  }
+];
 
 function CollapsibleSection({
   title,
@@ -83,6 +293,33 @@ export function EmbedCardEditor({ embed, embedIndex }: { embed: DiscordEmbed; em
     }));
   }
 
+  function applyEmbedPreset(preset: EmbedPreset) {
+    updateEmbed(embedIndex, preset.build());
+    setExpandedSections({
+      content: true,
+      meta: true,
+      identity: true,
+      media: true,
+      fields: true
+    });
+  }
+
+  function applyFieldPreset(preset: FieldPreset) {
+    const availableSlots = DISCORD_LIMITS.fields - embed.fields.length;
+
+    if (availableSlots <= 0) {
+      return;
+    }
+
+    updateEmbed(embedIndex, {
+      fields: [...embed.fields, ...preset.fields.slice(0, availableSlots).map((field) => ({ ...field }))]
+    });
+    setExpandedSections((current) => ({
+      ...current,
+      fields: true
+    }));
+  }
+
   const titleSummary = embed.title?.trim() || 'Untitled embed';
   const embedTextUsage = calculateEmbedTextLength(embed);
   const mediaCount = [embed.image?.url?.trim(), embed.thumbnail?.url?.trim()].filter(Boolean).length;
@@ -113,7 +350,12 @@ export function EmbedCardEditor({ embed, embedIndex }: { embed: DiscordEmbed; em
           <Button variant="ghost" aria-label={`Move embed ${embedIndex + 1} up`} onClick={() => moveEmbed(embedIndex, -1)} disabled={embedIndex === 0}>
             <ArrowUp className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" aria-label={`Move embed ${embedIndex + 1} down`} onClick={() => moveEmbed(embedIndex, 1)} disabled={embedIndex === embedCount - 1}>
+          <Button
+            variant="ghost"
+            aria-label={`Move embed ${embedIndex + 1} down`}
+            onClick={() => moveEmbed(embedIndex, 1)}
+            disabled={embedIndex === embedCount - 1}
+          >
             <ArrowDown className="h-4 w-4" />
           </Button>
           <Button variant="ghost" onClick={() => duplicateEmbed(embedIndex)} disabled={embedCount >= DISCORD_LIMITS.embeds}>
@@ -137,6 +379,38 @@ export function EmbedCardEditor({ embed, embedIndex }: { embed: DiscordEmbed; em
           summary={contentSummary}
         >
           <div className="space-y-4">
+            <div className="rounded-3xl border border-[color:rgba(249,115,22,0.22)] bg-[color:rgba(249,115,22,0.08)] p-4">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="mt-0.5 h-4 w-4 text-orange-300" />
+                    <p className="text-sm font-medium text-white">Preset starters</p>
+                  </div>
+                  <p className="mt-1 text-sm leading-6 text-slate-300">
+                    Drop in a proven embed shape, then tailor the copy, links, and media for this message.
+                  </p>
+                </div>
+                <SmallBadge>{embedPresets.length} presets</SmallBadge>
+              </div>
+
+              <div className="mt-4 grid gap-3 lg:grid-cols-2">
+                {embedPresets.map((preset) => (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    onClick={() => applyEmbedPreset(preset)}
+                    className="rounded-3xl border border-white/10 bg-slate-950/55 px-4 py-4 text-left transition hover:border-[color:rgba(249,115,22,0.4)] hover:bg-slate-950/80"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-sm font-medium text-white">{preset.name}</p>
+                      <SmallBadge>Apply</SmallBadge>
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-slate-400">{preset.description}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="grid gap-4 xl:grid-cols-2">
               <TextInput
                 label="title"
@@ -307,6 +581,31 @@ export function EmbedCardEditor({ embed, embedIndex }: { embed: DiscordEmbed; em
                 <Plus className="h-4 w-4" />
                 Add field
               </Button>
+            </div>
+
+            <div className="grid gap-3 lg:grid-cols-3">
+              {fieldPresets.map((preset) => {
+                const remaining = DISCORD_LIMITS.fields - embed.fields.length;
+                const addedCount = Math.min(remaining, preset.fields.length);
+
+                return (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    onClick={() => applyFieldPreset(preset)}
+                    disabled={remaining <= 0}
+                    className="rounded-3xl border border-white/10 bg-slate-950/50 px-4 py-4 text-left transition hover:border-[color:rgba(249,115,22,0.4)] hover:bg-slate-950/80 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-sm font-medium text-white">{preset.name}</p>
+                      <SmallBadge>
+                        {addedCount} field{addedCount === 1 ? '' : 's'}
+                      </SmallBadge>
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-slate-400">{preset.description}</p>
+                  </button>
+                );
+              })}
             </div>
 
             {embed.fields.length === 0 ? (
