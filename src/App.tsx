@@ -77,7 +77,7 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Embeds</p>
                   <p className="mt-2 text-2xl font-semibold text-white">{payload.embeds.length}</p>
@@ -86,7 +86,7 @@ export default function App() {
                   <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Fields</p>
                   <p className="mt-2 text-2xl font-semibold text-white">{fieldCount}</p>
                 </div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="col-span-2 rounded-2xl border border-white/10 bg-white/5 p-4 sm:col-span-1">
                   <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Payload</p>
                   <p className="mt-2 flex items-center gap-2 text-sm font-medium text-white">
                     <HardDriveDownload className="h-4 w-4 text-orange-300" />

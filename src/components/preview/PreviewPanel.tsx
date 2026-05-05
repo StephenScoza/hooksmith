@@ -35,6 +35,10 @@ export function PreviewPanel() {
       />
 
       <div className="p-5 sm:p-6">
+        <div className="mb-4 flex flex-wrap items-center gap-2 text-xs text-slate-400">
+          <SmallBadge>Discord-style approximation</SmallBadge>
+          <SmallBadge>{payload.embeds.length} embed{payload.embeds.length === 1 ? '' : 's'}</SmallBadge>
+        </div>
         <div className="rounded-[1.75rem] border border-white/10 bg-[#313338] p-4 shadow-inner shadow-black/20 sm:p-5">
           <div className="flex items-start gap-3">
             <div className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-full bg-gradient-to-br from-orange-500 to-slate-700 text-sm font-semibold text-white">
@@ -72,7 +76,7 @@ export function PreviewPanel() {
                     className="overflow-hidden rounded bg-[#2b2d31]"
                     style={{ borderLeft: `4px solid ${decimalToHex(embed.color)}` }}
                   >
-                    <div className="flex gap-4 p-4">
+                    <div className="flex flex-col gap-4 p-4 sm:flex-row">
                       <div className="min-w-0 flex-1">
                         {embed.author?.name?.trim() ? (
                           <div className="mb-2 flex items-center gap-2">
@@ -129,9 +133,9 @@ export function PreviewPanel() {
                       </div>
 
                       {embed.thumbnail?.url?.trim() ? (
-                        <img src={embed.thumbnail.url} alt="" className="h-20 w-20 rounded-lg object-cover" />
+                        <img src={embed.thumbnail.url} alt="" className="h-20 w-20 self-start rounded-lg object-cover" />
                       ) : (
-                        <div className="hidden rounded-lg border border-dashed border-white/10 p-4 text-slate-500 xl:block">
+                        <div className="hidden self-start rounded-lg border border-dashed border-white/10 p-4 text-slate-500 xl:block">
                           <ImageIcon className="h-5 w-5" />
                         </div>
                       )}
