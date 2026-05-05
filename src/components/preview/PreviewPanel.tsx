@@ -117,7 +117,7 @@ export function PreviewPanel() {
                               <img src={embed.footer.icon_url} alt="" className="h-5 w-5 rounded-full object-cover" />
                             ) : null}
                             {embed.footer?.text?.trim() ? <span>{embed.footer.text}</span> : null}
-                            {embed.footer?.text?.trim() && embed.timestamp?.trim() ? <span>•</span> : null}
+                            {embed.footer?.text?.trim() && embed.timestamp?.trim() ? <span>&bull;</span> : null}
                             {embed.timestamp?.trim() ? <span>{formatTimestamp(embed.timestamp)}</span> : null}
                           </div>
                         ) : null}

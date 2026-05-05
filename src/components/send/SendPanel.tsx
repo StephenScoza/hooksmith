@@ -1,5 +1,5 @@
-import { AlertTriangle, LoaderCircle, SendHorizonal, ShieldAlert } from 'lucide-react';
-import { sanitizePayload } from '../../lib/discord';
+import { AlertTriangle, Eraser, LoaderCircle, SendHorizontal, ShieldAlert } from 'lucide-react';
+import { isLikelyDiscordWebhookUrl, sanitizePayload } from '../../lib/discord';
 import { getValidationIssues } from '../../lib/validation';
 import { useWebhookStore } from '../../store/useWebhookStore';
 import { Button, Panel, PanelHeader, TextInput } from '../ui/FormControls';
@@ -12,12 +12,22 @@ export function SendPanel() {
   const setSendState = useWebhookStore((state) => state.setSendState);
 
   const validationIssues = getValidationIssues(payload);
+  const hasWebhookUrl = webhookUrl.trim().length > 0;
+  const webhookLooksValid = isLikelyDiscordWebhookUrl(webhookUrl);
 
   async function sendTestWebhook() {
     if (!webhookUrl.trim()) {
       setSendState({
         status: 'error',
         message: 'Paste a Discord webhook URL before sending a test message.'
+      });
+      return;
+    }
+
+    if (!webhookLooksValid) {
+      setSendState({
+        status: 'error',
+        message: 'That does not look like a valid Discord webhook URL.'
       });
       return;
     }
@@ -79,6 +89,7 @@ export function SendPanel() {
         <TextInput
           label="Discord webhook URL"
           hint="Pasted here for this session only."
+          error={hasWebhookUrl && !webhookLooksValid ? 'Expected a Discord webhook URL from discord.com/api/webhooks/...' : undefined}
           value={webhookUrl}
           onChange={(event) => setWebhookUrl(event.target.value)}
           placeholder="https://discord.com/api/webhooks/..."
@@ -100,8 +111,19 @@ export function SendPanel() {
 
         <div className="flex flex-wrap items-center gap-3">
           <Button onClick={sendTestWebhook} disabled={sendState.status === 'sending'}>
-            {sendState.status === 'sending' ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <SendHorizonal className="h-4 w-4" />}
+            {sendState.status === 'sending' ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <SendHorizontal className="h-4 w-4" />}
             {sendState.status === 'sending' ? 'Sending...' : 'Send test webhook'}
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              setWebhookUrl('');
+              setSendState({ status: 'idle' });
+            }}
+            disabled={!webhookUrl && !sendState.message}
+          >
+            <Eraser className="h-4 w-4" />
+            Clear secret
           </Button>
           <p className="text-sm text-slate-400">Discord may respond with 204 No Content on success.</p>
         </div>

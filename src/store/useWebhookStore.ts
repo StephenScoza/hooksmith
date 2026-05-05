@@ -38,6 +38,7 @@ type WebhookStore = {
   removeField: (embedIndex: number, fieldIndex: number) => void;
   moveField: (embedIndex: number, fieldIndex: number, direction: -1 | 1) => void;
   setJsonDraft: (value: string) => void;
+  syncJsonDraftFromPayload: () => void;
   setWebhookUrl: (value: string) => void;
   setSendState: (state: SendState) => void;
 };
@@ -203,6 +204,11 @@ export const useWebhookStore = create<WebhookStore>()(
             jsonError: null
           };
         }),
+      syncJsonDraftFromPayload: () =>
+        set((state) => ({
+          jsonDraft: syncJson(state.payload),
+          jsonError: null
+        })),
       setWebhookUrl: (webhookUrl) => set({ webhookUrl }),
       setSendState: (sendState) => set({ sendState })
     }),

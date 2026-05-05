@@ -1,8 +1,9 @@
 import { Check, Copy } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { exportFormats } from '../../lib/exporters';
+import { getPayloadSize } from '../../lib/discord';
 import { useWebhookStore } from '../../store/useWebhookStore';
-import { Button, Panel, PanelHeader } from '../ui/FormControls';
+import { Button, Panel, PanelHeader, SmallBadge } from '../ui/FormControls';
 
 export function ExportPanel() {
   const payload = useWebhookStore((state) => state.payload);
@@ -14,6 +15,7 @@ export function ExportPanel() {
     [activeFormatId]
   );
   const code = useMemo(() => activeFormat.build(payload), [activeFormat, payload]);
+  const payloadSize = useMemo(() => getPayloadSize(payload), [payload]);
 
   async function copyCode() {
     await navigator.clipboard.writeText(code);
@@ -36,7 +38,7 @@ export function ExportPanel() {
       />
 
       <div className="border-b border-white/10 px-5 py-4 sm:px-6">
-        <div className="flex flex-wrap gap-2">
+        <div className="mb-3 flex flex-wrap gap-2">
           {exportFormats.map((format) => (
             <button
               key={format.id}
@@ -47,6 +49,11 @@ export function ExportPanel() {
               {format.label}
             </button>
           ))}
+        </div>
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <SmallBadge>{activeFormat.language}</SmallBadge>
+          <SmallBadge>{payloadSize} bytes</SmallBadge>
+          <SmallBadge tone="warning">Keep real webhook URLs out of source</SmallBadge>
         </div>
       </div>
 

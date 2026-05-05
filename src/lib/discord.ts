@@ -196,6 +196,39 @@ export function serializePayload(payload: DiscordWebhookPayload) {
   return JSON.stringify(sanitizePayload(payload), null, 2);
 }
 
+export function getPayloadSize(payload: DiscordWebhookPayload) {
+  return new TextEncoder().encode(serializePayload(payload)).length;
+}
+
+export function getCharacterLimitMessage(length: number, limit: number) {
+  if (length > limit) {
+    return `${length - limit} characters over the Discord limit.`;
+  }
+
+  const remaining = limit - length;
+  if (remaining <= Math.max(10, Math.floor(limit * 0.1))) {
+    return `${remaining} characters remaining.`;
+  }
+
+  return undefined;
+}
+
+export function isLikelyDiscordWebhookUrl(value: string) {
+  const trimmed = value.trim();
+
+  if (!trimmed) {
+    return false;
+  }
+
+  try {
+    const url = new URL(trimmed);
+    const allowedHosts = new Set(['discord.com', 'ptb.discord.com', 'canary.discord.com']);
+    return allowedHosts.has(url.hostname) && /^\/api\/webhooks\/[^/]+\/[^/]+/.test(url.pathname);
+  } catch {
+    return false;
+  }
+}
+
 export function decimalToHex(value?: number) {
   return `#${(value ?? DEFAULT_EMBED_COLOR).toString(16).padStart(6, '0')}`;
 }

@@ -52,7 +52,7 @@ function Meta({ hint, counter, error }: Pick<BaseFieldProps, 'hint' | 'counter' 
   return (
     <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs">
       <span className={cn(error ? 'text-rose-300' : 'text-slate-500')}>{error ?? hint}</span>
-      {counter ? <span className="font-mono text-slate-500">{counter}</span> : null}
+      {counter ? <span className={cn('font-mono', error ? 'text-rose-300' : 'text-slate-500')}>{counter}</span> : null}
     </div>
   );
 }

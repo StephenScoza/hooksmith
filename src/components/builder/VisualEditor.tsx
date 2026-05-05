@@ -1,5 +1,5 @@
 import { Plus, Sparkles } from 'lucide-react';
-import { DISCORD_LIMITS } from '../../lib/discord';
+import { DISCORD_LIMITS, getCharacterLimitMessage } from '../../lib/discord';
 import { useWebhookStore } from '../../store/useWebhookStore';
 import { EmbedCardEditor } from './EmbedCardEditor';
 import { Button, EmptyState, PanelHeader, SmallBadge, TextInput, TextareaInput, ToggleInput } from '../ui/FormControls';
@@ -17,6 +17,7 @@ export function VisualEditor() {
             label="content"
             hint="Plain message content that appears above embeds."
             counter={`${payload.content?.length ?? 0}/${DISCORD_LIMITS.content}`}
+            error={getCharacterLimitMessage(payload.content?.length ?? 0, DISCORD_LIMITS.content)}
             value={payload.content ?? ''}
             onChange={(event) => updateRoot('content', event.target.value)}
             placeholder="Write the message body that should accompany your embeds."
@@ -28,6 +29,7 @@ export function VisualEditor() {
               label="username"
               hint="Optional webhook display name override."
               counter={`${payload.username?.length ?? 0}/${DISCORD_LIMITS.username}`}
+              error={getCharacterLimitMessage(payload.username?.length ?? 0, DISCORD_LIMITS.username)}
               value={payload.username ?? ''}
               onChange={(event) => updateRoot('username', event.target.value)}
               placeholder="Hooksmith"

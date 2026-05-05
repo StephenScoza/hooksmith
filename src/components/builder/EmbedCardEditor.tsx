@@ -1,5 +1,5 @@
-import { ArrowDown, ArrowUp, GripHorizontal, Plus, Trash2 } from 'lucide-react';
-import { DISCORD_LIMITS, decimalToHex, hexToDecimal, type DiscordEmbed } from '../../lib/discord';
+import { ArrowDown, ArrowUp, Clock3, GripHorizontal, Plus, Trash2 } from 'lucide-react';
+import { DISCORD_LIMITS, decimalToHex, getCharacterLimitMessage, hexToDecimal, type DiscordEmbed } from '../../lib/discord';
 import { useWebhookStore } from '../../store/useWebhookStore';
 import { Button, EmptyState, SmallBadge, TextInput, TextareaInput, ToggleInput } from '../ui/FormControls';
 
@@ -48,6 +48,7 @@ export function EmbedCardEditor({ embed, embedIndex }: { embed: DiscordEmbed; em
             label="title"
             hint="Primary heading for the embed card."
             counter={`${embed.title?.length ?? 0}/${DISCORD_LIMITS.title}`}
+            error={getCharacterLimitMessage(embed.title?.length ?? 0, DISCORD_LIMITS.title)}
             value={embed.title ?? ''}
             onChange={(event) => updateEmbed(embedIndex, { title: event.target.value })}
             placeholder="Webhook builder ready"
@@ -65,6 +66,7 @@ export function EmbedCardEditor({ embed, embedIndex }: { embed: DiscordEmbed; em
           label="description"
           hint="Supports multi-line content and Markdown-like formatting in Discord."
           counter={`${embed.description?.length ?? 0}/${DISCORD_LIMITS.description}`}
+          error={getCharacterLimitMessage(embed.description?.length ?? 0, DISCORD_LIMITS.description)}
           value={embed.description ?? ''}
           onChange={(event) => updateEmbed(embedIndex, { description: event.target.value })}
           placeholder="Describe the update, incident, release, or announcement here."
@@ -103,6 +105,7 @@ export function EmbedCardEditor({ embed, embedIndex }: { embed: DiscordEmbed; em
             <TextInput
               label="name"
               counter={`${embed.author?.name?.length ?? 0}/${DISCORD_LIMITS.authorName}`}
+              error={getCharacterLimitMessage(embed.author?.name?.length ?? 0, DISCORD_LIMITS.authorName)}
               value={embed.author?.name ?? ''}
               onChange={(event) => updateEmbedNested(embedIndex, 'author', { name: event.target.value })}
               placeholder="Platform Ops"
@@ -126,6 +129,7 @@ export function EmbedCardEditor({ embed, embedIndex }: { embed: DiscordEmbed; em
             <TextInput
               label="text"
               counter={`${embed.footer?.text?.length ?? 0}/${DISCORD_LIMITS.footerText}`}
+              error={getCharacterLimitMessage(embed.footer?.text?.length ?? 0, DISCORD_LIMITS.footerText)}
               value={embed.footer?.text ?? ''}
               onChange={(event) => updateEmbedNested(embedIndex, 'footer', { text: event.target.value })}
               placeholder="Notification feed"
@@ -201,6 +205,7 @@ export function EmbedCardEditor({ embed, embedIndex }: { embed: DiscordEmbed; em
                     <TextInput
                       label="name"
                       counter={`${field.name.length}/${DISCORD_LIMITS.fieldName}`}
+                      error={getCharacterLimitMessage(field.name.length, DISCORD_LIMITS.fieldName)}
                       value={field.name}
                       onChange={(event) => updateField(embedIndex, fieldIndex, { name: event.target.value })}
                       placeholder="Status"
@@ -208,6 +213,7 @@ export function EmbedCardEditor({ embed, embedIndex }: { embed: DiscordEmbed; em
                     <TextareaInput
                       label="value"
                       counter={`${field.value.length}/${DISCORD_LIMITS.fieldValue}`}
+                      error={getCharacterLimitMessage(field.value.length, DISCORD_LIMITS.fieldValue)}
                       value={field.value}
                       onChange={(event) => updateField(embedIndex, fieldIndex, { value: event.target.value })}
                       placeholder="Investigating"
@@ -225,6 +231,13 @@ export function EmbedCardEditor({ embed, embedIndex }: { embed: DiscordEmbed; em
             </div>
           )}
         </div>
+      </div>
+
+      <div className="px-4 pb-5 sm:px-5">
+        <Button variant="secondary" onClick={() => updateEmbed(embedIndex, { timestamp: new Date().toISOString() })}>
+          <Clock3 className="h-4 w-4" />
+          Use current timestamp
+        </Button>
       </div>
     </article>
   );
