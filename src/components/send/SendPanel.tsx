@@ -2,6 +2,7 @@ import { AlertTriangle, Eraser, LoaderCircle, SendHorizontal, ShieldAlert } from
 import { isLikelyDiscordWebhookUrl, sanitizePayload } from '../../lib/discord';
 import { getValidationIssues } from '../../lib/validation';
 import { useWebhookStore } from '../../store/useWebhookStore';
+import { HooksmithMark } from '../brand/HooksmithMark';
 import { Button, Panel, PanelHeader, TextInput } from '../ui/FormControls';
 
 export function SendPanel() {
@@ -75,7 +76,9 @@ export function SendPanel() {
       <div className="space-y-5 p-5 sm:p-6">
         <div className="rounded-3xl border border-amber-400/25 bg-amber-400/10 p-4 text-sm leading-6 text-amber-50/90">
           <div className="flex items-start gap-3">
-            <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-amber-200" />
+            <div className="shrink-0 rounded-2xl bg-[#111827] p-2 shadow-lg shadow-black/20">
+              <HooksmithMark className="h-9 w-9" tile={false} />
+            </div>
             <div>
               <p className="font-semibold text-amber-100">Treat webhook URLs like passwords</p>
               <p className="mt-1">

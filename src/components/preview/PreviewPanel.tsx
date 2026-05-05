@@ -1,6 +1,7 @@
 import { Bot, ImageIcon } from 'lucide-react';
 import { calculateEmbedTextLength, decimalToHex } from '../../lib/discord';
 import { useWebhookStore } from '../../store/useWebhookStore';
+import { HooksmithMark } from '../brand/HooksmithMark';
 import { EmptyState, Panel, PanelHeader, SmallBadge } from '../ui/FormControls';
 
 function formatTimestamp(timestamp?: string) {
@@ -37,7 +38,11 @@ export function PreviewPanel() {
         <div className="rounded-[1.75rem] border border-white/10 bg-[#313338] p-4 shadow-inner shadow-black/20 sm:p-5">
           <div className="flex items-start gap-3">
             <div className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-full bg-gradient-to-br from-orange-500 to-slate-700 text-sm font-semibold text-white">
-              {avatarUrl ? <img src={avatarUrl} alt="" className="h-full w-full object-cover" /> : <Bot className="h-5 w-5" />}
+              {avatarUrl ? (
+                <img src={avatarUrl} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <HooksmithMark className="h-full w-full" tile={false} />
+              )}
             </div>
 
             <div className="min-w-0 flex-1">

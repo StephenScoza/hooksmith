@@ -8,6 +8,7 @@ import { PreviewPanel } from './components/preview/PreviewPanel';
 import { SendPanel } from './components/send/SendPanel';
 import { ValidationPanel } from './components/validation/ValidationPanel';
 import { useWebhookStore } from './store/useWebhookStore';
+import { BrandAssetsPanel } from './components/brand/BrandAssetsPanel';
 
 export default function App() {
   const payload = useWebhookStore((state) => state.payload);
@@ -122,6 +123,7 @@ export default function App() {
 
           <div className="space-y-6">
             <PreviewPanel />
+            <BrandAssetsPanel />
             <ExportPanel />
             <SendPanel />
           </div>
